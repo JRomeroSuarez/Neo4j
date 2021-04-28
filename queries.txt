@@ -1,0 +1,33 @@
+Find an actor named Tom Cruise:
+MATCH (tom {name: "Tom Cruise"}) RETURN tom
+
+Find movie called the matrix
+MATCH (matrix {title: "The Matrix"}) RETURN matrix
+
+Movies from 2000 to 2010
+MATCH (twenties:Movie) WHERE twenties.released >= 2000  AND twenties.released < 2010 RETURN twenties.title
+
+Movies in which Tom Cruise has acted
+MATCH (tom:Person {name: "Tom Cruise"})-[:ACTED_IN]->(tomCruiseMovies) RETURN tom,tomCruiseMovies
+
+Name of actors who have acted with Tom Cruise
+MATCH(tom:Person{name:"Tom Cruise"})-[:ACTED_IN]->(m)<-[:ACTED_IN]-(coActors) RETURN coActors.name
+
+Movies and actors who are 4 jumps away from Kevin Bacon
+MATCH (bacon:Person {name:"Kevin Bacon"})-[*1..4]-(hollywood) RETURN DISTINCT hollywood
+
+Shorter path between these 2 persons from the relationships
+MATCH p=shortestPath((bacon:Person {name:"Kevin Bacon"})-[*]-(keanu:Person {name:"Keanu Reeves"})) RETURN p
+
+Update of a date of birth
+MATCH (p:Person {name: 'Keanu Reeves'}) SET p.born = 2077 RETURN p
+
+Update all the movies that tom cruise has acted in to have been released in 2010
+MATCH (tom:Person {name: "Tom Cruise"})-[:ACTED_IN]->(tomCruiseMovies)
+SET tomCruiseMovies.released = 2010
+RETURN tom,tomCruiseMovies
+
+We remove all nodes and their relationships
+MATCH (n) DETACH DELETE n
+We show all
+MATCH (n) RETURN n
